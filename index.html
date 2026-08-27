@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rajmangal Baitha — Laravel Backend Developer</title>
+<meta name="description" content="Portfolio of Rajmangal Baitha, Laravel backend developer and BCA student in Lalitpur, Nepal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #17181C;
+    --surface: #1F2126;
+    --surface-2: #26282F;
+    --line: #34363E;
+    --text: #ECECEA;
+    --muted: #9A9CA5;
+    --gold: #C9A227;
+    --gold-soft: #E4C766;
+    --gold-dim: rgba(201,162,39,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg); color:var(--text); font-family:'Inter', sans-serif; line-height:1.6; overflow-x:hidden;}
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit; text-decoration:none;}
+  ::selection{background:var(--gold-dim); color:var(--gold-soft);}
+  img{max-width:100%; display:block;}
+
+  /* ---- nav ---- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:20px 6vw;
+    background:rgba(23,24,28,0.8); backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent; transition:border-color .3s ease;
+  }
+  header.scrolled{border-bottom-color:var(--line);}
+  .logo{font-family:'JetBrains Mono', monospace; font-size:15px; color:var(--gold-soft);}
+  .logo span{color:var(--muted);}
+  nav ul{list-style:none; display:flex; gap:30px; align-items:center;}
+  nav a{font-size:14px; color:var(--muted); transition:color .2s;}
+  nav a:hover, nav a.active{color:var(--gold-soft);}
+  .nav-cta{
+    font-family:'JetBrains Mono', monospace; font-size:13px; background:var(--gold);
+    color:#1A1A1D; padding:10px 20px; border-radius:24px; transition:.2s;
+  }
+  .nav-cta:hover{background:var(--gold-soft);}
+  .nav-toggle{display:none; background:none; border:none; color:var(--text); font-size:24px; cursor:pointer;}
+
+  /* ---- hero ---- */
+  .hero{
+    min-height:100vh; display:grid; grid-template-columns:1.05fr 0.95fr; align-items:center; gap:20px;
+    padding:120px 6vw 60px; position:relative; overflow:hidden;
+  }
+  @media(max-width:980px){ .hero{grid-template-columns:1fr; padding-top:110px; min-height:auto;} }
+  .hero-eyebrow{font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--gold); display:flex; align-items:center; gap:10px; margin-bottom:20px;}
+  .hero-eyebrow::before{content:''; width:8px; height:8px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 4px var(--gold-dim);}
+  .hero h1{font-size:clamp(2.2rem, 5vw, 3.4rem); line-height:1.1;}
+  .hero-role{font-size:clamp(1.2rem, 2.6vw, 1.7rem); color:var(--muted); margin-top:14px; display:flex; gap:8px; align-items:baseline;}
+  #typedRole{color:var(--gold-soft); border-bottom:2px solid var(--gold); font-weight:500;}
+  .cursor{display:inline-block; width:2px; height:1.1em; background:var(--gold-soft); margin-left:2px; animation:blink 1s step-end infinite; vertical-align:text-bottom;}
+  @keyframes blink{50%{opacity:0;}}
+  .hero-sub{margin-top:22px; max-width:480px; font-size:16px; color:var(--muted);}
+  .hero-social{display:flex; gap:12px; margin-top:32px;}
+  .hero-social a{
+    width:42px; height:42px; border-radius:50%; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; color:var(--muted); transition:.2s;
+  }
+  .hero-social a:hover{border-color:var(--gold); color:var(--gold-soft); transform:translateY(-3px);}
+  .hero-actions{display:flex; gap:16px; margin-top:32px; flex-wrap:wrap;}
+  .btn{font-family:'JetBrains Mono', monospace; font-size:14px; padding:14px 26px; border-radius:26px; cursor:pointer; transition:all .25s ease; display:inline-flex; align-items:center; gap:8px; border:1px solid transparent;}
+  .btn-primary{background:var(--gold); color:#1A1A1D;}
+  .btn-primary:hover{background:var(--gold-soft); transform:translateY(-2px);}
+  .btn-ghost{border-color:var(--line); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--gold); color:var(--gold-soft); transform:translateY(-2px);}
+
+  .hero-photo-wrap{position:relative; justify-self:center; width:100%; max-width:400px;}
+  .hero-blob{position:absolute; inset:-30px; z-index:0; border-radius:50% 50% 45% 55% / 55% 45% 55% 45%; background:linear-gradient(150deg, var(--gold-dim), transparent 70%); filter:blur(2px);}
+  .hero-photo-frame{position:relative; z-index:1; width:100%; aspect-ratio:4/5; border-radius:14px; overflow:hidden; background:linear-gradient(160deg, var(--surface-2), var(--surface)); border:1px solid var(--line); box-shadow:0 40px 80px rgba(0,0,0,0.5);}
+  .hero-photo-frame img{width:100%; height:100%; object-fit:cover; display:none;}
+  .hero-photo-frame .initials{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif; font-size:110px; color:var(--gold); opacity:0.85;}
+  .corner{position:absolute; width:26px; height:26px; border-color:var(--gold); z-index:2;}
+  .corner.tl{top:-1px; left:-1px; border-top:2px solid; border-left:2px solid; border-top-left-radius:10px;}
+  .corner.br{bottom:-1px; right:-1px; border-bottom:2px solid; border-right:2px solid; border-bottom-right-radius:10px;}
+  .hero-badge{position:absolute; bottom:-18px; left:-18px; z-index:2; background:var(--surface); border:1px solid var(--gold); border-radius:10px; padding:12px 18px; font-family:'JetBrains Mono', monospace; font-size:12px; box-shadow:0 10px 30px rgba(0,0,0,0.4);}
+  .hero-badge b{display:block; color:var(--gold-soft); font-size:14px; font-family:'Fraunces', serif;}
+  .photo-note{margin-top:24px; font-size:11px; color:var(--muted); font-family:'JetBrains Mono', monospace; text-align:center;}
+  @media(max-width:980px){ .hero-photo-wrap{max-width:280px; margin-top:10px;} }
+
+  .scroll-cue{position:absolute; bottom:26px; left:50%; transform:translateX(-50%); font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted); display:flex; flex-direction:column; align-items:center; gap:6px;}
+  .scroll-cue .line{width:1px; height:34px; background:linear-gradient(var(--gold), transparent);}
+  @media(max-width:760px){ .scroll-cue{display:none;} }
+
+  /* ---- sections ---- */
+  section{padding:100px 6vw;}
+  .section-head{margin-bottom:50px; max-width:640px;}
+  .section-num{font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--gold); margin-bottom:12px; display:block;}
+  .section-head h2{font-size:clamp(1.8rem, 4vw, 2.6rem);}
+  .section-head p{color:var(--muted); margin-top:14px; font-size:16px;}
+  .section-alt{background:var(--surface);}
+
+  /* ---- about ---- */
+  .about-grid{display:grid; grid-template-columns:0.85fr 1.15fr; gap:50px; align-items:start;}
+  @media(max-width:900px){ .about-grid{grid-template-columns:1fr;} }
+  .profile-card{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:28px; text-align:center;}
+  .profile-avatar{width:120px; height:120px; border-radius:50%; margin:0 auto 16px; border:3px solid var(--gold); overflow:hidden; position:relative; background:linear-gradient(160deg, var(--surface-2), var(--surface)); display:flex; align-items:center; justify-content:center;}
+  .profile-avatar img{width:100%; height:100%; object-fit:cover; display:none;}
+  .profile-avatar .initials{font-family:'Fraunces', serif; font-size:40px; color:var(--gold);}
+  .profile-card h3{font-size:19px;}
+  .profile-card .role{color:var(--gold-soft); font-size:13px; font-family:'JetBrains Mono', monospace; margin-top:4px;}
+  .stat-strip{display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin:28px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0;}
+  .stat-strip div{text-align:center; border-right:1px solid var(--line);}
+  .stat-strip div:last-child{border-right:none;}
+  .stat-strip b{display:block; font-family:'Fraunces', serif; font-size:26px; color:var(--gold-soft);}
+  .stat-strip span{font-size:10.5px; color:var(--muted); font-family:'JetBrains Mono', monospace; letter-spacing:0.04em;}
+  .profile-card .btn{width:100%; justify-content:center; margin-bottom:10px;}
+  .profile-social{display:flex; gap:10px; justify-content:center; margin-top:16px;}
+  .profile-social a{width:36px; height:36px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--muted); transition:.2s;}
+  .profile-social a:hover{border-color:var(--gold); color:var(--gold-soft);}
+
+  .about-text > .tag{color:var(--gold); font-size:12px; font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:0.06em;}
+  .about-text h3{font-size:26px; margin:10px 0 16px;}
+  .about-text p{color:var(--muted); font-size:15.5px; margin-bottom:14px; max-width:60ch;}
+
+  .info-cards{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:28px 0;}
+  @media(max-width:520px){ .info-cards{grid-template-columns:1fr;} }
+  .info-card{background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:16px 18px; display:flex; gap:12px; align-items:flex-start;}
+  .info-card .ic{color:var(--gold); flex-shrink:0; margin-top:2px;}
+  .info-card .il{font-size:10.5px; color:var(--muted); font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:0.05em;}
+  .info-card .iv{font-size:14.5px; margin-top:3px;}
+
+  .skills-title{font-size:12px; color:var(--gold); font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; display:block;}
+  .skillbar{margin-bottom:16px;}
+  .skillbar .row{display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;}
+  .skillbar .row b{font-weight:500;}
+  .skillbar .row span{color:var(--gold-soft); font-family:'JetBrains Mono', monospace; font-size:13px;}
+  .track{height:6px; background:var(--surface-2); border-radius:4px; overflow:hidden;}
+  .fill{height:100%; background:linear-gradient(90deg, var(--gold), var(--gold-soft)); border-radius:4px; width:0; transition:width 1.4s ease;}
+
+  /* ---- resume ---- */
+  .resume-grid{display:grid; grid-template-columns:1fr 1fr; gap:50px;}
+  @media(max-width:820px){ .resume-grid{grid-template-columns:1fr;} }
+  .resume-col .tag{font-family:'JetBrains Mono', monospace; font-size:11px; color:#1A1A1D; background:var(--gold); padding:6px 14px; border-radius:20px; display:inline-block;}
+  .resume-col h3{font-size:22px; margin:14px 0 24px;}
+  .timeline{position:relative;}
+  .timeline::before{content:''; position:absolute; left:9px; top:6px; bottom:6px; width:1px; background:var(--line);}
+  .t-item{position:relative; padding-left:38px; margin-bottom:36px;}
+  .t-item:last-child{margin-bottom:0;}
+  .t-item::before{content:''; position:absolute; left:0; top:4px; width:19px; height:19px; border-radius:50%; background:var(--surface); border:2px solid var(--gold);}
+  .t-date{font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--gold); margin-bottom:6px; display:block;}
+  .t-item h4{font-size:18px; margin-bottom:3px; font-family:'Inter',sans-serif; font-weight:600;}
+  .t-org{color:var(--muted); font-size:13.5px; margin-bottom:8px;}
+  .t-desc{color:var(--muted); font-size:14.5px;}
+
+  /* ---- projects ---- */
+  .filter-row{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:40px;}
+  .filter-btn{font-family:'JetBrains Mono', monospace; font-size:13px; padding:9px 18px; border-radius:20px; border:1px solid var(--line); color:var(--muted); cursor:pointer; background:none; transition:.2s;}
+  .filter-btn:hover{border-color:var(--gold); color:var(--gold-soft);}
+  .filter-btn.active{background:var(--gold); border-color:var(--gold); color:#1A1A1D;}
+  .projects-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:24px;}
+  @media(max-width:820px){ .projects-grid{grid-template-columns:1fr;} }
+  .project-card{background:var(--surface); border:1px solid var(--line); border-radius:12px; overflow:hidden; transition:all .3s ease; display:flex; flex-direction:column;}
+  .project-card:hover{border-color:var(--gold); transform:translateY(-4px);}
+  .project-card.hidden{display:none;}
+  .project-thumb{position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; background:linear-gradient(135deg, var(--surface-2), #1B1C21 70%); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:center;}
+  .project-thumb img{width:100%; height:100%; object-fit:cover; display:none;}
+  .project-thumb .thumb-fallback{font-family:'JetBrains Mono', monospace; font-size:12.5px; color:var(--muted); display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; padding:0 20px;}
+  .project-thumb .thumb-fallback .glyph{font-family:'Fraunces', serif; font-size:36px; color:var(--gold); opacity:0.75;}
+  .project-body{padding:24px 26px 28px;}
+  .project-meta{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+  .project-tags{display:flex; gap:8px; flex-wrap:wrap;}
+  .project-tags span{font-size:10.5px; font-family:'JetBrains Mono', monospace; color:var(--gold-soft); border:1px solid var(--line); padding:4px 10px; border-radius:20px;}
+  .project-year{font-size:12px; color:var(--muted); font-family:'JetBrains Mono', monospace;}
+  .project-card h3{font-size:21px; margin-bottom:10px;}
+  .project-card p{color:var(--muted); font-size:14.5px; margin-bottom:16px;}
+  .project-link{font-size:13px; color:var(--gold-soft); font-family:'JetBrains Mono', monospace; display:inline-flex; align-items:center; gap:6px;}
+  .project-link:hover{text-decoration:underline;}
+  .featured{grid-column:1 / -1;}
+  .featured .featured-inner{display:grid; grid-template-columns:1.1fr 0.9fr;}
+  @media(max-width:820px){ .featured .featured-inner{grid-template-columns:1fr;} }
+  .featured .project-thumb{aspect-ratio:auto; height:100%; min-height:260px;}
+  .featured .stat-row{display:flex; gap:26px; margin-top:18px;}
+  .fstat b{display:block; font-family:'Fraunces', serif; font-size:24px; color:var(--gold-soft);}
+  .fstat span{font-size:11px; color:var(--muted); font-family:'JetBrains Mono', monospace;}
+
+  .cta-strip{margin-top:50px; border-top:1px solid var(--line); padding-top:32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px;}
+  .cta-strip h4{font-size:18px;}
+  .cta-strip p{color:var(--muted); font-size:14px; margin-top:4px;}
+
+  /* ---- contact ---- */
+  .contact-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:50px;}
+  @media(max-width:900px){ .contact-grid{grid-template-columns:1fr;} }
+  .contact-list .contact-item{display:flex; align-items:center; gap:16px; padding:18px 0; border-bottom:1px solid var(--line);}
+  .contact-list .icon{width:40px; height:40px; border:1px solid var(--line); border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--gold); flex-shrink:0;}
+  .contact-list .label{font-size:11px; color:var(--muted); font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:0.05em;}
+  .contact-list .value{font-size:15px; margin-top:2px;}
+  .contact-list a.contact-item:hover .value{color:var(--gold-soft);}
+  .social-row{display:flex; gap:12px; margin-top:24px;}
+  .social-row a{width:42px; height:42px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--muted); transition:.2s;}
+  .social-row a:hover{border-color:var(--gold); color:var(--gold-soft); transform:translateY(-3px);}
+
+  form.contact-form{display:flex; flex-direction:column; gap:16px;}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media(max-width:560px){ .form-row{grid-template-columns:1fr;} }
+  .contact-form input, .contact-form textarea{
+    background:var(--surface); border:1px solid var(--line); border-radius:8px;
+    padding:14px 16px; color:var(--text); font-family:'Inter', sans-serif; font-size:14.5px; width:100%;
+  }
+  .contact-form input:focus, .contact-form textarea:focus{outline:none; border-color:var(--gold);}
+  .contact-form textarea{resize:vertical; min-height:140px;}
+  .contact-form button{align-self:flex-start;}
+  .form-note{font-size:12px; color:var(--muted); font-family:'JetBrains Mono', monospace;}
+
+  /* ---- footer ---- */
+  footer{background:var(--surface); border-top:1px solid var(--line); padding:70px 6vw 30px;}
+  .footer-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr 1.2fr; gap:40px; padding-bottom:40px;}
+  @media(max-width:820px){ .footer-grid{grid-template-columns:1fr 1fr; row-gap:36px;} }
+  @media(max-width:520px){ .footer-grid{grid-template-columns:1fr;} }
+  .footer-grid h5{font-size:14px; color:var(--gold-soft); margin-bottom:16px; font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:0.05em;}
+  .footer-brand p{color:var(--muted); font-size:14px; margin:14px 0 18px; max-width:36ch;}
+  .footer-links{list-style:none;}
+  .footer-links li{margin-bottom:10px;}
+  .footer-links a{color:var(--muted); font-size:14px; transition:.2s;}
+  .footer-links a:hover{color:var(--gold-soft);}
+  .footer-bottom{border-top:1px solid var(--line); padding-top:24px; text-align:center; font-size:13px; color:var(--muted); font-family:'JetBrains Mono', monospace;}
+
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.visible{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} .reveal{opacity:1; transform:none; transition:none;} .cursor{animation:none;} }
+
+  @media(max-width:760px){
+    nav{display:none;}
+    .nav-toggle{display:block;}
+    header.open nav{display:flex; position:fixed; top:64px; left:0; right:0; bottom:0; background:var(--bg); flex-direction:column; padding:40px 6vw; overflow:auto;}
+    header.open nav ul{flex-direction:column; gap:22px; align-items:flex-start;}
+  }
+  a:focus-visible, button:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="logo">raj<span>.dev</span></div>
+  <nav>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#resume">Resume</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#contact" class="nav-cta">Hire Me</a></li>
+    </ul>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div>
+    <span class="hero-eyebrow mono">AVAILABLE FOR OPPORTUNITIES</span>
+    <h1>Hi, I'm Rajmangal Baitha</h1>
+    <div class="hero-role">I'm a <span id="typedRole">Laravel Developer</span><span class="cursor"></span></div>
+    <p class="hero-sub">Final-year BCA student in Lalitpur, Nepal, building role-based backends, admin panels, and relational schemas that hold up under real data.</p>
+    <div class="hero-social">
+      <a href="https://x.com/YOUR_USERNAME" target="_blank" rel="noopener" aria-label="X"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-6.9l-5.4-6.8L4.7 22H1.6l8.1-9.3L1 2h7l4.9 6.2zm-1.2 18h1.9L6.4 4H4.4z"/></svg></a>
+      <a href="https://facebook.com/YOUR_USERNAME" target="_blank" rel="noopener" aria-label="Facebook"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12"/></svg></a>
+      <a href="https://instagram.com/YOUR_USERNAME" target="_blank" rel="noopener" aria-label="Instagram"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+      <a href="https://linkedin.com/in/rajmangal-baitha-0400aa267" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg></a>
+    </div>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">→ View Projects</a>
+      <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-photo-wrap">
+    <div class="hero-blob"></div>
+    <div class="hero-photo-frame">
+      <!-- replace src below with your real photo file -->
+      <img src="your-photo.jpg" alt="Rajmangal Baitha" onerror="this.style.display='none'">
+      <span class="initials">RB</span>
+      <span class="corner tl"></span>
+      <span class="corner br"></span>
+    </div>
+    <div class="hero-badge"><b>Laravel Dev</b>Lalitpur, NP</div>
+    <p class="photo-note">// replace src="your-photo.jpg" above with your real photo</p>
+  </div>
+
+  <div class="scroll-cue"><span>SCROLL</span><span class="line"></span></div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about">
+  <div class="section-head reveal">
+    <span class="section-num">01 / About Me</span>
+    <h2>A bit about me</h2>
+    <p>Final-year BCA student and Laravel backend developer focused on building systems that scale from schema to admin panel.</p>
+  </div>
+
+  <div class="about-grid reveal">
+    <div class="profile-card">
+      <div class="profile-avatar">
+        <img src="your-photo.jpg" alt="Rajmangal Baitha" onerror="this.style.display='none'">
+        <span class="initials">RB</span>
+      </div>
+      <h3>Rajmangal Baitha</h3>
+      <div class="role">LARAVEL DEVELOPER</div>
+
+      <div class="stat-strip">
+        <div><b>4+</b><span>PROJECTS</span></div>
+        <div><b>1</b><span>INTERNSHIP</span></div>
+        <div><b>2026</b><span>GRAD YEAR</span></div>
+      </div>
+
+      <a href="#contact" class="btn btn-primary">Download CV</a>
+      <a href="#contact" class="btn btn-ghost">Contact Me</a>
+
+      <div class="profile-social">
+        <a href="https://github.com/codewithrajmangal" target="_blank" rel="noopener" aria-label="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.6-4.04-1.6-.55-1.4-1.34-1.77-1.34-1.77-1.1-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.08 1.83 2.82 1.3 3.5 1 .1-.79.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3"/></svg></a>
+        <a href="https://linkedin.com/in/rajmangal-baitha-0400aa267" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg></a>
+        <a href="https://wa.me/9779746642266" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2a10 10 0 0 0-8.5 15.2L2 22l4.94-1.5A10 10 0 1 0 12.04 2m5.87 14.2c-.25.7-1.45 1.35-2 1.43-.53.09-1.2.13-1.94-.12a17 17 0 0 1-6.98-4.9 5.7 5.7 0 0 1-1.2-3 3.2 3.2 0 0 1 1-2.36c.26-.26.56-.3.75-.3h.55c.18 0 .42-.02.63.5.25.6.85 2.06.92 2.2.08.16.13.34.03.54-.53 1.06-1.1.99-.6 1.8a8 8 0 0 0 3.02 2.86c.2.1.33.08.46-.05.13-.14.55-.63.7-.85.14-.2.29-.17.5-.1.2.08 1.29.63 1.5.74.22.1.36.16.42.25.06.1.06.55-.19 1.26"/></svg></a>
+      </div>
+    </div>
+
+    <div class="about-text">
+      <span class="tag mono">ABOUT ME</span>
+      <h3>Turning schemas into working products</h3>
+      <p>I'm <strong>Rajmangal Baitha</strong>, originally from Rautahat and now based in Mahalaxmi-8, Lubhu, Lalitpur. I'm in my final year of a <strong>BCA</strong> at Kathmandu College of Technology, affiliated with Tribhuvan University.</p>
+      <p>My focus is Laravel backend development — role-based systems, Filament admin panels, and relational schemas that hold up under real data. My capstone project, <strong>HamroKoseli</strong>, is a 19-table multi-vendor e-commerce platform built with a six-person team.</p>
+
+      <div class="info-cards">
+        <div class="info-card">
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <div><div class="il">Based In</div><div class="iv">Lalitpur, Nepal</div></div>
+        </div>
+        <div class="info-card">
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg></span>
+          <div><div class="il">Email</div><div class="iv">rajmangalrajak4@gmail.com</div></div>
+        </div>
+        <div class="info-card">
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+          <div><div class="il">Phone</div><div class="iv">+977 974-6642266</div></div>
+        </div>
+        <div class="info-card">
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+          <div><div class="il">Availability</div><div class="iv">Open to Work</div></div>
+        </div>
+      </div>
+
+      <span class="skills-title mono">CORE SKILLS</span>
+      <div class="skillbar">
+        <div class="row"><b>Laravel & PHP</b><span>90%</span></div>
+        <div class="track"><div class="fill" data-width="90"></div></div>
+      </div>
+      <div class="skillbar">
+        <div class="row"><b>MySQL & Eloquent ORM</b><span>85%</span></div>
+        <div class="track"><div class="fill" data-width="85"></div></div>
+      </div>
+      <div class="skillbar">
+        <div class="row"><b>FilamentPHP</b><span>80%</span></div>
+        <div class="track"><div class="fill" data-width="80"></div></div>
+      </div>
+      <div class="skillbar">
+        <div class="row"><b>Blade & Tailwind CSS</b><span>82%</span></div>
+        <div class="track"><div class="fill" data-width="82"></div></div>
+      </div>
+      <div class="skillbar">
+        <div class="row"><b>REST APIs & RBAC</b><span>78%</span></div>
+        <div class="track"><div class="fill" data-width="78"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESUME ============ -->
+<section id="resume" class="section-alt">
+  <div class="section-head reveal">
+    <span class="section-num">02 / Resume</span>
+    <h2>Experience & education</h2>
+  </div>
+  <div class="resume-grid reveal">
+    <div class="resume-col">
+      <span class="tag">EXPERIENCE</span>
+      <h3>Professional Journey</h3>
+      <div class="timeline">
+        <div class="t-item">
+          <span class="t-date">Internship</span>
+          <h4>Laravel Developer Intern</h4>
+          <div class="t-org">Code IT, Dharan · Supervised by Er. Sajal Shrestha</div>
+          <p class="t-desc">Completed an internship focused on Laravel development, working on real backend tasks under supervision.</p>
+        </div>
+      </div>
+    </div>
+    <div class="resume-col">
+      <span class="tag">EDUCATION</span>
+      <h3>Academic Background</h3>
+      <div class="timeline">
+        <div class="t-item">
+          <span class="t-date">2022 — Present</span>
+          <h4>Bachelor of Computer Application (BCA)</h4>
+          <div class="t-org">Kathmandu College of Technology · Tribhuvan University</div>
+          <p class="t-desc">Final-year (7th semester) student. Capstone: HamroKoseli, a multi-vendor e-commerce platform.</p>
+        </div>
+        <div class="t-item">
+          <span class="t-date">2020 — 2022</span>
+          <h4>+2 in Computer Science</h4>
+          <div class="t-org">Hetauda School of Management and Social Sciences</div>
+          <p class="t-desc">Foundational coursework in programming and computer science leading into the BCA program.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SKILLS / STACK ============ -->
+<section id="skills">
+  <div class="section-head reveal">
+    <span class="section-num">03 / Tech Stack</span>
+    <h2>Tools I work with</h2>
+  </div>
+  <div class="skills-wrap reveal" style="display:flex; flex-wrap:wrap; gap:12px;">
+    <span class="chip" style="font-family:'JetBrains Mono', monospace; font-size:13px; padding:10px 18px; border:1px solid var(--line); border-radius:20px; color:var(--muted);">Laravel</span>
+    <span class="chip" style="font-family:'JetBrains Mono', monospace; font-size:13px; padding:10px 18px; border:1px solid var(--line); border-radius:20px; color:var(--muted);">PHP</span>
+    <span class="chip" style="font-family:'JetBrains Mono', monospace; font-size:13px; padding:10px 18px; border:1px solid var(--line); border-radius:20px; color:var(--muted);">MySQL</span>
+    <span class="chip" style="font-family:'JetBrains Mono', monospace; font-size:13px; padding:10px 18px; border:1px solid var(--line); border-radius:20px; color:var(--muted);">Eloquent ORM</span>
+    <span class="chip" style="font-family:'JetBrains Mono', monospace; font-size:13px; padding:10px 18px; border:1px solid var(--line); border-radius:20px; color:var(--muted);">FilamentPHP</span>
+    <span class="chip" style="font-family:'JetBrains Mono', monospace; font-size:13px; padding:10px 18px; border:1px solid var(--line); border-radius:20px; color:var(--muted);">Blade</span>
+    <span class="chip" style="font-family:'JetBrains Mono', monospace; font-size:13px; padding:10px 18px; border:1px solid var(--line); border-radius:20px; color:var(--muted);">Tailwind CSS</span>
+    <span class="chip" style="font-family:'JetBrains Mono', monospace; font-size:13px; padding:10px 18px; border:1px solid var(--line); border-radius:20px; color:var(--muted);">RESTful APIs</span>
+    <span class="chip" style="font-family:'JetBrains Mono', monospace; font-size:13px; padding:10px 18px; border:1px solid var(--line); border-radius:20px; color:var(--muted);">Role-Based Access Control</span>
+    <span class="chip" style="font-family:'JetBrains Mono', monospace; font-size:13px; padding:10px 18px; border:1px solid var(--line); border-radius:20px; color:var(--muted);">Git & GitHub</span>
+    <span class="chip" style="font-family:'JetBrains Mono', monospace; font-size:13px; padding:10px 18px; border:1px solid var(--line); border-radius:20px; color:var(--muted);">Android (Java, XML)</span>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section id="projects" class="section-alt">
+  <div class="section-head reveal">
+    <span class="section-num">04 / Projects</span>
+    <h2>Selected work</h2>
+    <p>A mix of academic and personal builds, all centered on Laravel and relational data design.</p>
+  </div>
+
+  <div class="filter-row reveal">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="capstone">Capstone</button>
+    <button class="filter-btn" data-filter="personal">Personal</button>
+    <button class="filter-btn" data-filter="academic">Academic</button>
+  </div>
+
+  <div class="projects-grid reveal">
+
+    <div class="project-card featured" data-cat="capstone">
+      <div class="featured-inner">
+        <div class="project-thumb">
+          <!-- replace src below with a real screenshot: projects/hamrokoseli.jpg -->
+          <img src="projects/hamrokoseli.jpg" alt="HamroKoseli screenshot" onerror="this.style.display='none'">
+          <div class="thumb-fallback"><span class="glyph">HK</span>Add screenshot: projects/hamrokoseli.jpg</div>
+        </div>
+        <div class="project-body">
+          <div class="project-meta">
+            <div class="project-tags"><span>LARAVEL</span><span>FILAMENT</span><span>CAPSTONE</span></div>
+            <span class="project-year">2026</span>
+          </div>
+          <h3>HamroKoseli</h3>
+          <p>A multi-vendor e-commerce platform connecting Nepalese artisans with buyers. Full vendor-approval workflow, guest submissions, and role-based multi-authentication across Customer / Vendor / Admin.</p>
+          <a href="https://github.com/codewithrajmangal" class="project-link" target="_blank" rel="noopener">View on GitHub →</a>
+          <div class="stat-row">
+            <div class="fstat"><b>19</b><span>DB TABLES</span></div>
+            <div class="fstat"><b>6</b><span>TEAM MEMBERS</span></div>
+            <div class="fstat"><b>3</b><span>USER ROLES</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-cat="personal">
+      <div class="project-thumb">
+        <!-- replace src below with a real screenshot: projects/primehub.jpg -->
+        <img src="projects/primehub.jpg" alt="PrimeHub screenshot" onerror="this.style.display='none'">
+        <div class="thumb-fallback"><span class="glyph">PH</span>Add screenshot: projects/primehub.jpg</div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">
+          <div class="project-tags"><span>LARAVEL</span><span>FILAMENT</span></div>
+          <span class="project-year">2025</span>
+        </div>
+        <h3>PrimeHub</h3>
+        <p>A full-stack Laravel e-commerce platform with a Filament admin panel, hierarchical category management, and soft-delete support throughout.</p>
+        <a href="https://github.com/codewithrajmangal" class="project-link" target="_blank" rel="noopener">View on GitHub →</a>
+      </div>
+    </div>
+
+    <div class="project-card" data-cat="personal">
+      <div class="project-thumb">
+        <!-- replace src below with a real screenshot: projects/playpulse.jpg -->
+        <img src="projects/playpulse.jpg" alt="Play Pulse screenshot" onerror="this.style.display='none'">
+        <div class="thumb-fallback"><span class="glyph">PP</span>Add screenshot: projects/playpulse.jpg</div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">
+          <div class="project-tags"><span>LARAVEL</span><span>MYSQL</span></div>
+          <span class="project-year">2025</span>
+        </div>
+        <h3>Play Pulse</h3>
+        <p>A second Laravel e-commerce build, used to practice catalog structure, checkout flow, and admin-side management outside the capstone codebase.</p>
+        <a href="https://github.com/codewithrajmangal" class="project-link" target="_blank" rel="noopener">View on GitHub →</a>
+      </div>
+    </div>
+
+    <div class="project-card" data-cat="academic">
+      <div class="project-thumb">
+        <!-- replace src below with a real screenshot: projects/sdro.jpg -->
+        <img src="projects/sdro.jpg" alt="SDRO screenshot" onerror="this.style.display='none'">
+        <div class="thumb-fallback"><span class="glyph">SD</span>Add screenshot: projects/sdro.jpg</div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">
+          <div class="project-tags"><span>LARAVEL</span><span>PHP</span></div>
+          <span class="project-year">2024</span>
+        </div>
+        <h3>SDRO</h3>
+        <p>Smart Delivery Route Optimizer — a PHP/Laravel application exploring route-planning logic for delivery systems.</p>
+        <a href="https://github.com/codewithrajmangal" class="project-link" target="_blank" rel="noopener">View on GitHub →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cta-strip reveal">
+    <div><h4>Like what you see?</h4><p>Open to Laravel developer roles, freelance backend work, and collaboration.</p></div>
+    <a href="#contact" class="btn btn-primary">Let's Work Together</a>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact">
+  <div class="section-head reveal">
+    <span class="section-num">05 / Contact</span>
+    <h2>Let's work together</h2>
+    <p>Reach out through any channel below, or send a message directly.</p>
+  </div>
+
+  <div class="contact-grid reveal">
+    <div>
+      <div class="contact-list">
+        <a class="contact-item" href="mailto:rajmangalrajak4@gmail.com">
+          <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg></div>
+          <div><div class="label">Email</div><div class="value">rajmangalrajak4@gmail.com</div></div>
+        </a>
+        <a class="contact-item" href="tel:+9779746642266">
+          <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><div class="label">Phone</div><div class="value">+977 974-6642266</div></div>
+        </a>
+        <a class="contact-item" href="https://github.com/codewithrajmangal" target="_blank" rel="noopener">
+          <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.6-4.04-1.6-.55-1.4-1.34-1.77-1.34-1.77-1.1-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.08 1.83 2.82 1.3 3.5 1 .1-.79.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3"/></svg></div>
+          <div><div class="label">GitHub</div><div class="value">codewithrajmangal</div></div>
+        </a>
+        <a class="contact-item" href="https://linkedin.com/in/rajmangal-baitha-0400aa267" target="_blank" rel="noopener">
+          <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg></div>
+          <div><div class="label">LinkedIn</div><div class="value">rajmangal-baitha</div></div>
+        </a>
+      </div>
+      <div class="social-row">
+        <a href="https://facebook.com/YOUR_USERNAME" target="_blank" rel="noopener" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12"/></svg></a>
+        <a href="https://wa.me/9779746642266" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2a10 10 0 0 0-8.5 15.2L2 22l4.94-1.5A10 10 0 1 0 12.04 2m5.87 14.2c-.25.7-1.45 1.35-2 1.43-.53.09-1.2.13-1.94-.12a17 17 0 0 1-6.98-4.9 5.7 5.7 0 0 1-1.2-3 3.2 3.2 0 0 1 1-2.36c.26-.26.56-.3.75-.3h.55c.18 0 .42-.02.63.5.25.6.85 2.06.92 2.2.08.16.13.34.03.54-.53 1.06-1.1.99-.6 1.8a8 8 0 0 0 3.02 2.86c.2.1.33.08.46-.05.13-.14.55-.63.7-.85.14-.2.29-.17.5-.1.2.08 1.29.63 1.5.74.22.1.36.16.42.25.06.1.06.55-.19 1.26"/></svg></a>
+        <a href="https://instagram.com/YOUR_USERNAME" target="_blank" rel="noopener" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a href="https://tiktok.com/@YOUR_USERNAME" target="_blank" rel="noopener" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82c-.9-.98-1.4-2.27-1.4-3.66h-3.24v13.9a3.1 3.1 0 1 1-2.19-2.97V9.6a6.34 6.34 0 1 0 5.43 6.28V9.03a8.16 8.16 0 0 0 4.76 1.52V7.31c-1.1 0-2.36-.63-3.36-1.5z"/></svg></a>
+        <a href="https://x.com/YOUR_USERNAME" target="_blank" rel="noopener" aria-label="X"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-6.9l-5.4-6.8L4.7 22H1.6l8.1-9.3L1 2h7l4.9 6.2zm-1.2 18h1.9L6.4 4H4.4z"/></svg></a>
+      </div>
+      <p class="photo-note" style="text-align:left; margin-top:16px;">// replace YOUR_USERNAME in each link above with your real profile handle</p>
+    </div>
+
+    <form class="contact-form" id="contactForm">
+      <div class="form-row">
+        <input type="text" id="cf-name" placeholder="Your Name" required>
+        <input type="email" id="cf-email" placeholder="Your Email" required>
+      </div>
+      <input type="text" id="cf-subject" placeholder="Subject">
+      <textarea id="cf-message" placeholder="Your Message" required></textarea>
+      <button type="submit" class="btn btn-primary">Send Message</button>
+      <p class="form-note">// opens your email app with this message pre-filled — no backend needed on free hosting</p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">raj<span>.dev</span></div>
+      <p>Laravel backend developer and final-year BCA student based in Lalitpur, Nepal — building role-based systems and admin panels.</p>
+      <div class="social-row">
+        <a href="https://github.com/codewithrajmangal" target="_blank" rel="noopener" aria-label="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.6-4.04-1.6-.55-1.4-1.34-1.77-1.34-1.77-1.1-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.08 1.83 2.82 1.3 3.5 1 .1-.79.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3"/></svg></a>
+        <a href="https://linkedin.com/in/rajmangal-baitha-0400aa267" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg></a>
+        <a href="https://x.com/YOUR_USERNAME" target="_blank" rel="noopener" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-6.9l-5.4-6.8L4.7 22H1.6l8.1-9.3L1 2h7l4.9 6.2zm-1.2 18h1.9L6.4 4H4.4z"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <h5>Quick Links</h5>
+      <ul class="footer-links">
+        <li><a href="#top">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#resume">Resume</a></li>
+        <li><a href="#projects">Projects</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Skills</h5>
+      <ul class="footer-links">
+        <li><a href="#skills">Laravel & PHP</a></li>
+        <li><a href="#skills">MySQL / Eloquent</a></li>
+        <li><a href="#skills">FilamentPHP</a></li>
+        <li><a href="#skills">REST APIs</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Contact Us</h5>
+      <p style="color:var(--muted); font-size:14px; line-height:1.9;">
+        Mahalaxmi-8, Lubhu<br>Lalitpur, Nepal<br><br>
+        <strong style="color:var(--text);">Phone:</strong> +977 974-6642266<br>
+        <strong style="color:var(--text);">Email:</strong> rajmangalrajak4@gmail.com
+      </p>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Rajmangal Baitha. All Rights Reserved.</div>
+</footer>
+
+<script>
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 20));
+
+  document.getElementById('navToggle').addEventListener('click', () => header.classList.toggle('open'));
+  document.querySelectorAll('nav a').forEach(a => a.addEventListener('click', () => header.classList.remove('open')));
+
+  // reveal on scroll
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // animate skill bars when visible
+  const fillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.width = e.target.dataset.width + '%';
+        fillObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.fill').forEach(el => fillObserver.observe(el));
+
+  // typed role rotator
+  const roles = ['Laravel Developer', 'Backend Engineer', 'BCA Final-Year Student', 'PHP Developer'];
+  const typedEl = document.getElementById('typedRole');
+  let ri = 0, ci = roles[0].length, deleting = false;
+  function tick(){
+    const word = roles[ri];
+    if(!deleting){
+      ci++;
+      if(ci > word.length){ deleting = true; setTimeout(tick, 1400); return; }
+    } else {
+      ci--;
+      if(ci < 0){ deleting = false; ri = (ri+1) % roles.length; ci = 0; }
+    }
+    typedEl.textContent = word.slice(0, ci);
+    setTimeout(tick, deleting ? 45 : 85);
+  }
+  typedEl.textContent = roles[0];
+  setTimeout(tick, 1400);
+
+  // image fallbacks
+  function wireImageFallback(img, fallbackEl){
+    if(!img) return;
+    img.addEventListener('load', () => { img.style.display = 'block'; if(fallbackEl) fallbackEl.style.display = 'none'; });
+  }
+  document.querySelectorAll('.hero-photo-frame, .profile-avatar').forEach(box => {
+    wireImageFallback(box.querySelector('img'), box.querySelector('.initials'));
+  });
+  document.querySelectorAll('.project-thumb').forEach(thumb => {
+    wireImageFallback(thumb.querySelector('img'), thumb.querySelector('.thumb-fallback'));
+  });
+
+  // project filter
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('.project-card').forEach(card => {
+        card.classList.toggle('hidden', f !== 'all' && card.dataset.cat !== f);
+      });
+    });
+  });
+
+  // contact form -> mailto (works on free static hosting with no backend)
+  document.getElementById('contactForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('cf-name').value;
+    const email = document.getElementById('cf-email').value;
+    const subject = document.getElementById('cf-subject').value || 'Portfolio Contact';
+    const message = document.getElementById('cf-message').value;
+    const body = `Name: ${name}\nEmail: ${email}\n\n${message}`;
+    window.location.href = `mailto:rajmangalrajak4@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+</script>
+
+</body>
+</html>
